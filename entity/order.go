@@ -23,3 +23,9 @@ type OrderHistory struct {
 	OrderDate   string
 	TotalAmount float64
 }
+
+type OrderReport struct {
+	OrderDay      string
+	TotalQuantity int
+	TotalSales    float64
+}
