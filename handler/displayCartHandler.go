@@ -3,25 +3,25 @@ package handler
 import (
 	"database/sql"
 	"fmt"
-	"pair-programming/entity"
+	"pair-project/entity"
 )
 
 func DisplayCart(db *sql.DB, user entity.User) error {
-	rows, err := db.Query("SELECT name, description, published FROM `user_games` JOIN games ON games.id = user_games.game_id WHERE user_id = ?", user.Id)
+	rows, err := db.Query("SELECT products.ProductName, products.Description, ShoppingCart.Quantity FROM ShoppingCart JOIN Products ON products.ProductID = ShoppingCart.ProductID WHERE ShoppingCart.UserID = ?", user.Id)
 	if err != nil {
 		return err
 	}
 	defer rows.Close()
 
 	var displayCart entity.DisplayCart
-	fmt.Printf("\n[Name] - [Description] - [Published]\n")
+	fmt.Printf("\n[Name] - [Description] - [Quantity]\n")
 	for rows.Next() {
-		err := rows.Scan(&displayCart.Name, &displayCart.Description, &displayCart.Published)
+		err := rows.Scan(&displayCart.Name, &displayCart.Description, &displayCart.Quantity)
 		if err != nil {
 			return err
 		}
 
-		fmt.Printf("[%v] - [%v] - [%v]\n", displayCart.Name, displayCart.Description, displayCart.Published)
+		fmt.Printf("[%v] - [%v] - [%v]\n", displayCart.Name, displayCart.Description, displayCart.Quantity)
 	}
 	fmt.Println()
 	return nil

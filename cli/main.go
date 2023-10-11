@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"pair-programming/config"
-	"pair-programming/entity"
-	"pair-programming/handler"
+	"pair-project/config"
+	"pair-project/entity"
+	"pair-project/handler"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -39,16 +39,22 @@ func main() {
 
 		switch option {
 		case 1:
-			var username, password string
+			var email, password, firstName, lastName string
 			fmt.Printf("\nREGISTER\n")
-			fmt.Print("Masukkan username: ")
-			fmt.Scanln(&username)
+			fmt.Print("Masukkan email: ")
+			fmt.Scanln(&email)
 			fmt.Print("Masukkan password: ")
 			fmt.Scanln(&password)
+			fmt.Print("Masukkan nama depan: ")
+			fmt.Scanln(&firstName)
+			fmt.Print("Masukkan nama belakang: ")
+			fmt.Scanln(&lastName)
 
 			user := entity.User{
-				Username: username,
-				Password: password,
+				Email:     email,
+				Password:  password,
+				FirstName: firstName,
+				LastName:  lastName,
 			}
 
 			if err := handler.Register(user, db); err != nil {
@@ -58,20 +64,94 @@ func main() {
 			}
 
 		case 2:
-			var username, password string
+			var email, password string
 			fmt.Printf("\nLOGIN\n")
-			fmt.Print("Username: ")
-			fmt.Scanln(&username)
+			fmt.Print("Email: ")
+			fmt.Scanln(&email)
 			fmt.Print("Password: ")
 			fmt.Scanln(&password)
 
-			_, authenticated, err := handler.Login(username, password, db)
+			user, authenticated, err := handler.Login(email, password, db)
 			if err != nil {
-				fmt.Println("Kesalahan saat login:", err)
+				panic(err.Error())
 			} else if authenticated {
-				fmt.Println("Login berhasil!")
+				for {
+					fmt.Printf("\nSelamat datang %v. Pilih opsi berikut:\n", user.Email)
+					fmt.Println("1. Tampilkan semua produk")
+					fmt.Println("2. Tampilkan cart")
+					fmt.Println("3. Tambah produk ke cart")
+					fmt.Println("4. Hapus produk dari cart")
+					fmt.Println("5. Exit")
+					fmt.Print("Masukkan pilihan (1/2/3/4/5): ")
+
+					var option int
+					scanner.Scan()
+					_, err := fmt.Sscanf(scanner.Text(), "%d", &option)
+					if err != nil {
+						fmt.Println("Input anda bukan merupakan integer")
+						continue
+					}
+
+					switch option {
+					case 1:
+						err := handler.DisplayProducts(db)
+						if err != nil {
+							log.Fatal(err)
+						}
+
+					case 2:
+						err := handler.DisplayCart(db, user)
+						if err != nil {
+							log.Fatal(err)
+						}
+
+					case 3:
+						fmt.Print("Masukkan ID product: ")
+						var productOption int
+						scanner.Scan()
+						_, err := fmt.Sscanf(scanner.Text(), "%d", &productOption)
+						if err != nil {
+							log.Fatal("Input bukan merupakan angka")
+						}
+
+						fmt.Print("Masukkan Quantity: ")
+						var quantity int
+						scanner.Scan()
+						_, err = fmt.Sscanf(scanner.Text(), "%d", &quantity)
+						if err != nil {
+							log.Fatal("Input bukan merupakan angka")
+						}
+
+						err = handler.AddCart(db, user, productOption, quantity)
+						if err != nil {
+							log.Fatal(err)
+						}
+
+					case 4:
+						fmt.Print("Masukkan ID product yang ingin dihapus: ")
+						var deleteProductOption int
+						scanner.Scan()
+						_, err := fmt.Sscanf(scanner.Text(), "%d", &deleteProductOption)
+						if err != nil {
+							log.Fatal("Input bukan merupakan angka")
+						}
+
+						err = handler.DeleteCart(db, user, deleteProductOption)
+						if err != nil {
+							log.Fatal(err)
+						}
+
+					case 5:
+						fmt.Println("Sampai jumpa!")
+						os.Exit(0)
+
+					default:
+						fmt.Println("Input harus merupakan angka 1-5")
+						os.Exit(1)
+					}
+				}
 			} else {
-				fmt.Println("Login gagal. Periksa kembali username dan password Anda.")
+				fmt.Println("Login gagal")
 			}
 
 		case 3:

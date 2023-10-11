@@ -2,14 +2,15 @@ package handler
 
 import (
 	"database/sql"
-	"pair-programming/entity"
+	"pair-project/entity"
+
 	"golang.org/x/crypto/bcrypt"
 )
 
-func Login(username, password string, db *sql.DB) (entity.User, bool, error) {
+func Login(email, password string, db *sql.DB) (entity.User, bool, error) {
 	var user entity.User
-	row := db.QueryRow("SELECT id, username, password FROM users WHERE username = ?", username)
-	err := row.Scan(&user.Id, &user.Username, &user.Password)
+	row := db.QueryRow("SELECT UserID, Email, Password, FirstName, LastName FROM Users WHERE Email = ?", email)
+	err := row.Scan(&user.Id, &user.Email, &user.Password, &user.FirstName, &user.LastName)
 	if err != nil {
 		return user, false, err
 	}

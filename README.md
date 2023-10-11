@@ -1,3 +1,3 @@
-# PAIR PROGRAMMING
-- Daniel Osvaldo Rahmanto
-- Tan Karunia Dzikira
+# PAIR PROJECT
+- Nafisa Alfiani
+- Tan Karunia Dzikra

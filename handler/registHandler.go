@@ -2,7 +2,8 @@ package handler
 
 import (
 	"database/sql"
-	"pair-programming/entity"
+	"pair-project/entity"
+
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -12,6 +13,6 @@ func Register(user entity.User, db *sql.DB) error {
 		return err
 	}
 
-	_, err = db.Exec("INSERT INTO users (username, password) VALUES (?,?)", user.Username, hashedPassword)
+	_, err = db.Exec("INSERT INTO Users (Email, Password, FirstName, LastName) VALUES (?,?,?,?)", user.Email, hashedPassword, user.FirstName, user.LastName)
 	return err
 }
