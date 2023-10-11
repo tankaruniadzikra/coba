@@ -81,8 +81,9 @@ func main() {
 					fmt.Println("2. Tampilkan cart")
 					fmt.Println("3. Tambah produk ke cart")
 					fmt.Println("4. Hapus produk dari cart")
-					fmt.Println("5. Exit")
-					fmt.Print("Masukkan pilihan (1/2/3/4/5): ")
+					fmt.Println("5. View User Report")
+					fmt.Println("6. Exit")
+					fmt.Print("Masukkan pilihan (1/2/3/4/5/6): ")
 
 					var option int
 					scanner.Scan()
@@ -142,6 +143,12 @@ func main() {
 						}
 
 					case 5:
+						err := handler.ViewUserReport(db, user.Id)
+						if err != nil {
+							log.Fatal(err)
+						}
+
+					case 6:
 						fmt.Println("Sampai jumpa!")
 						os.Exit(0)
 
@@ -151,7 +158,8 @@ func main() {
 					}
 				}
 			} else {
-				fmt.Println("Login gagal")
+				fmt.Println("\nFailed to login")
+				fmt.Println("=============================")
 			}
 
 		case 3:
