@@ -83,8 +83,9 @@ func main() {
 					fmt.Println("4. Hapus produk dari cart")
 					fmt.Println("5. View User Report")
 					fmt.Println("6. View Order Report")
-					fmt.Println("7. Exit")
-					fmt.Print("Masukkan pilihan (1/2/3/4/5/6/7): ")
+					fmt.Println("7. View Stock Report")
+					fmt.Println("8. Exit")
+					fmt.Print("Masukkan pilihan (1/2/3/4/5/6/7/8): ")
 
 					var option int
 					scanner.Scan()
@@ -156,6 +157,12 @@ func main() {
 						}
 
 					case 7:
+						err := handler.ViewStockReport(db)
+						if err != nil {
+							log.Fatal(err)
+						}
+
+					case 8:
 						fmt.Println("Sampai jumpa!")
 						os.Exit(0)
 
