@@ -82,8 +82,9 @@ func main() {
 					fmt.Println("3. Tambah produk ke cart")
 					fmt.Println("4. Hapus produk dari cart")
 					fmt.Println("5. View User Report")
-					fmt.Println("6. Exit")
-					fmt.Print("Masukkan pilihan (1/2/3/4/5/6): ")
+					fmt.Println("6. View Order Report")
+					fmt.Println("7. Exit")
+					fmt.Print("Masukkan pilihan (1/2/3/4/5/6/7): ")
 
 					var option int
 					scanner.Scan()
@@ -149,6 +150,12 @@ func main() {
 						}
 
 					case 6:
+						err := handler.ViewOrderReport(db, user.Id)
+						if err != nil {
+							log.Fatal(err)
+						}
+
+					case 7:
 						fmt.Println("Sampai jumpa!")
 						os.Exit(0)
 
