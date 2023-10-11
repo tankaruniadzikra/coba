@@ -14,19 +14,16 @@ type Product struct {
 type Category struct {
 	CategoryID   int
 	CategoryName string
-	Description  string
 }
 
 type Brand struct {
-	BrandID     int
-	BrandName   string
-	Description string
+	BrandID   int
+	BrandName string
 }
 
 type Size struct {
-	SizeID      int
-	SizeName    string
-	Description string
+	SizeID   int
+	SizeName string
 }
 
 type Color struct {

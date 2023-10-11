@@ -78,9 +78,9 @@ func main() {
 				for {
 					fmt.Printf("\nSelamat datang %v. Pilih opsi berikut:\n", user.Email)
 					fmt.Println("1. Tampilkan semua produk")
-					fmt.Println("2. Tampilkan cart")
-					fmt.Println("3. Tambah produk ke cart")
-					fmt.Println("4. Hapus produk dari cart")
+					fmt.Println("2. Order pesanan")
+					fmt.Println("3. Tampilkan riwayat pesanan")
+					fmt.Println("4. Hapus riwayat pesanan")
 					fmt.Println("5. View User Report")
 					fmt.Println("6. View Order Report")
 					fmt.Println("7. View Stock Report")
@@ -103,14 +103,8 @@ func main() {
 						}
 
 					case 2:
-						err := handler.DisplayCart(db, user)
-						if err != nil {
-							log.Fatal(err)
-						}
-
-					case 3:
+						var productOption, quantity int
 						fmt.Print("Masukkan ID product: ")
-						var productOption int
 						scanner.Scan()
 						_, err := fmt.Sscanf(scanner.Text(), "%d", &productOption)
 						if err != nil {
@@ -118,28 +112,33 @@ func main() {
 						}
 
 						fmt.Print("Masukkan Quantity: ")
-						var quantity int
 						scanner.Scan()
 						_, err = fmt.Sscanf(scanner.Text(), "%d", &quantity)
 						if err != nil {
 							log.Fatal("Input bukan merupakan angka")
 						}
 
-						err = handler.AddCart(db, user, productOption, quantity)
+						err = handler.PlaceOrder(db, user, productOption, quantity)
+						if err != nil {
+							log.Fatal(err)
+						}
+
+					case 3:
+						err := handler.DisplayOrderHistory(db, user)
 						if err != nil {
 							log.Fatal(err)
 						}
 
 					case 4:
-						fmt.Print("Masukkan ID product yang ingin dihapus: ")
-						var deleteProductOption int
+						fmt.Print("Masukkan Order ID yang ingin dihapus: ")
+						var orderID int
 						scanner.Scan()
-						_, err := fmt.Sscanf(scanner.Text(), "%d", &deleteProductOption)
+						_, err := fmt.Sscanf(scanner.Text(), "%d", &orderID)
 						if err != nil {
 							log.Fatal("Input bukan merupakan angka")
 						}
 
-						err = handler.DeleteCart(db, user, deleteProductOption)
+						err = handler.DeleteOrderHistory(db, user, orderID)
 						if err != nil {
 							log.Fatal(err)
 						}

@@ -15,3 +15,11 @@ type OrderItem struct {
 	PricePerUnit float64
 	TotalPrice   float64
 }
+
+type OrderHistory struct {
+	OrderID     int
+	ProductName string
+	Quantity    int
+	OrderDate   string
+	TotalAmount float64
+}
