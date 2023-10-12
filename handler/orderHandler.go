@@ -48,6 +48,12 @@ func PlaceOrder(db *sql.DB, user entity.User, ProductID, Quantity int) error {
 		return err
 	}
 
+	// Step 4: Kurangi stok produk
+	_, err = db.Exec("UPDATE Stock SET Quantity = Quantity - ? WHERE ProductID = ?", Quantity, ProductID)
+	if err != nil {
+		return err
+	}
+
 	// Menampilkan rincian pesanan
 	fmt.Printf("Produk '%s' (Quantity: %d) berhasil dipesan. Total Harga: %.2f\n", productName, Quantity, totalPrice)
 
